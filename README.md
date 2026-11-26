@@ -56,10 +56,9 @@ npm run dist            # 설치 파일 만들기 (dist/ 폴더, 윈도우는 .e
 ## 런처가 하는 일
 1. Microsoft 계정 로그인 (msmc 라이브러리, 토큰은 OS 암호화로 저장)
 2. 선택한 버전에 맞는 Java(17 또는 21)를 모장 공식 런타임에서 받아옴
-3. Fabric 로더 설치
-4. Modrinth에서 Fabric API, Sodium, Lithium, FerriteCore, Entity Culling, ImmediatelyFast를 버전에 맞게 받아옴
-5. `launcher/mods`에 있는 WN Client 모드를 넣음
-6. 실행. "바로 접속"이 켜져 있으면 서버(기본값 wnsv.kr)로 곧장 들어감
+3. Fabric 로더 설치 (다른 모드는 설치하지 않음)
+4. WN Client 본체(Fabric API 내장)를 mods 폴더가 아닌 클라이언트 폴더에서 바로 불러옴 → mods 폴더는 비어 있음
+5. 실행. "바로 접속"이 켜져 있으면 서버(기본값 wnsv.kr)로 곧장 들어감
 
 버전마다 따로 인스턴스 폴더를 써서 모드가 섞이지 않습니다. 위치: `%APPDATA%/.wnclient/instances/<버전>`
 
@@ -73,7 +72,6 @@ npm run dist            # 설치 파일 만들기 (dist/ 폴더, 윈도우는 .e
 
 ## 바꾸기 쉬운 곳
 - 이름, 서버 주소, 버전 목록: `launcher/src/config.js`
-- 자동으로 받는 최적화 모드 목록: `launcher/src/install.js`의 `MODRINTH_MODS`
 - 런처 디자인: `launcher/renderer/style.css`
 - HUD 요소 추가: `mod/src/main/java/kr/wnsv/wnclient/hud/HudElements.java`
 

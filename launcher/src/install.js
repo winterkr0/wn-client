@@ -1,18 +1,9 @@
-// Fabric 로더 프로필 + 모드(Fabric API, 최적화 모드, WN Client 모드)를 버전별 인스턴스에 설치합니다.
+// Fabric 로더만 설치하고, WN Client 본체는 mods 폴더가 아니라 클라이언트 전용 폴더에서 직접 불러옵니다.
+// → 인스턴스의 mods 폴더는 비어 있고, 모든 기능은 WN Client 안에 들어 있습니다.
 const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
-const { getJson, download } = require('./net');
-
-// Modrinth에서 버전에 맞춰 자동으로 받아오는 모드
-const MODRINTH_MODS = [
-  { slug: 'fabric-api', required: true },
-  { slug: 'sodium' },        // 렌더링 최적화
-  { slug: 'lithium' },       // 게임 로직 최적화
-  { slug: 'ferrite-core' },  // 메모리 최적화
-  { slug: 'entityculling' }, // 보이지 않는 엔티티 렌더 생략
-  { slug: 'immediatelyfast' },
-];
+const { getJson } = require('./net');
 
 async function installFabricProfile(baseDir, mc) {
   const loaders = await getJson(`https://meta.fabricmc.net/v2/versions/loader/${mc}`);
@@ -30,62 +21,43 @@ async function installFabricProfile(baseDir, mc) {
   return id;
 }
 
-async function modrinthFile(slug, mc) {
-  const q = `loaders=${encodeURIComponent('["fabric"]')}&game_versions=${encodeURIComponent(JSON.stringify([mc]))}`;
-  const versions = await getJson(`https://api.modrinth.com/v2/project/${slug}/version?${q}`);
-  const pick = versions.find((v) => v.version_type === 'release') || versions[0];
-  if (!pick) return null;
-  const f = pick.files.find((x) => x.primary) || pick.files[0];
-  return { url: f.url, name: f.filename, sha1: f.hashes?.sha1 };
-}
-
-function bundledModsDir() {
+function bundledClientDir() {
   return app.isPackaged ? path.join(process.resourcesPath, 'mods') : path.join(__dirname, '..', 'mods');
 }
 
-async function installMods(instanceDir, mc, log) {
+// WN Client 본체 jar를 클라이언트 폴더에 두고 경로를 돌려줍니다.
+function installClientCore(baseDir, mc) {
+  const name = `wnclient-${mc}.jar`;
+  const src = path.join(bundledClientDir(), name);
+  if (!fs.existsSync(src)) throw new Error(`WN Client ${mc} 파일이 없어요. 런처를 다시 설치해 주세요.`);
+  const dest = path.join(baseDir, 'client', name);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.copyFileSync(src, dest);
+  return dest;
+}
+
+// 예전 버전 런처가 mods 폴더에 넣었던 파일(Sodium 등)을 치웁니다. 사용자가 직접 넣은 모드는 건드리지 않습니다.
+function cleanupOldManagedMods(instanceDir) {
   const modsDir = path.join(instanceDir, 'mods');
-  fs.mkdirSync(modsDir, { recursive: true });
   const manifestFile = path.join(modsDir, '.wn-managed.json');
-  let previous = [];
-  try { previous = JSON.parse(fs.readFileSync(manifestFile, 'utf8')); } catch {}
-  const installed = [];
-
-  for (const mod of MODRINTH_MODS) {
-    const f = await modrinthFile(mod.slug, mc).catch(() => null);
-    if (!f) {
-      if (mod.required) throw new Error(`${mod.slug}의 ${mc} 버전을 찾지 못했어요.`);
-      log(`[모드] ${mod.slug}: ${mc} 버전 없음, 건너뜀`);
-      continue;
+  if (!fs.existsSync(manifestFile)) return;
+  try {
+    for (const name of JSON.parse(fs.readFileSync(manifestFile, 'utf8'))) {
+      fs.rmSync(path.join(modsDir, name), { force: true });
     }
-    if (await download(f.url, path.join(modsDir, f.name), f.sha1)) log(`[모드] ${f.name} 설치`);
-    installed.push(f.name);
-  }
-
-  // 직접 빌드한 WN Client 모드 (launcher/mods/wnclient-<버전>.jar)
-  const own = path.join(bundledModsDir(), `wnclient-${mc}.jar`);
-  if (fs.existsSync(own)) {
-    fs.copyFileSync(own, path.join(modsDir, path.basename(own)));
-    installed.push(path.basename(own));
-  } else {
-    log(`[경고] ${path.basename(own)} 파일이 없어요. 인게임 HUD 없이 실행됩니다.`);
-  }
-
-  // 이전에 런처가 넣었지만 이제 필요 없는 파일 정리 (사용자가 직접 넣은 모드는 건드리지 않음)
-  for (const name of previous) {
-    if (!installed.includes(name)) fs.rmSync(path.join(modsDir, name), { force: true });
-  }
-  fs.writeFileSync(manifestFile, JSON.stringify(installed, null, 2));
+  } catch {}
+  fs.rmSync(manifestFile, { force: true });
 }
 
 async function prepareInstance(baseDir, mc, log) {
   const instanceDir = path.join(baseDir, 'instances', mc);
-  fs.mkdirSync(instanceDir, { recursive: true });
+  fs.mkdirSync(path.join(instanceDir, 'mods'), { recursive: true });
+  cleanupOldManagedMods(instanceDir);
   log(`[설치] Fabric 로더 확인 중 (${mc})`);
   const customId = await installFabricProfile(baseDir, mc);
-  log('[설치] 모드 확인 중');
-  await installMods(instanceDir, mc, log);
-  return { instanceDir, customId };
+  const clientJar = installClientCore(baseDir, mc);
+  log(`[설치] WN Client ${mc} 준비 완료`);
+  return { instanceDir, customId, clientJar };
 }
 
 module.exports = { prepareInstance };

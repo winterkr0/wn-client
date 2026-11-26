@@ -61,8 +61,8 @@ ipcMain.handle('game:launch', async () => {
     progress('Java 확인 중', 0.05);
     const javaPath = await ensureJava(base, mc, (label, r) => progress(label, 0.05 + r * 0.25));
 
-    progress('Fabric·모드 설치 중', 0.3);
-    const { instanceDir, customId } = await prepareInstance(base, mc, log);
+    progress('WN Client 준비 중', 0.3);
+    const { instanceDir, customId, clientJar } = await prepareInstance(base, mc, log);
 
     const launcher = new Client();
     launcher.on('debug', (d) => log(d));
@@ -84,6 +84,8 @@ ipcMain.handle('game:launch', async () => {
       version: { number: mc, type: 'release', custom: customId },
       memory: { max: `${cfg.ramMb}M`, min: '1024M' },
       overrides: { gameDirectory: instanceDir },
+      // WN Client 본체를 mods 폴더 밖에서 바로 불러옴
+      customArgs: [`-Dfabric.addMods=${clientJar}`],
     };
     if (cfg.autoJoin && cfg.server) {
       opts.quickPlay = { type: 'multiplayer', identifier: cfg.server };

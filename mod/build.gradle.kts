@@ -18,6 +18,8 @@ dependencies {
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    // Fabric API를 WN Client jar 안에 내장 → mods 폴더에 따로 넣을 필요 없음
+    include("net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
 }
 
 // 1.20.5부터는 Java 21, 그 전은 Java 17
