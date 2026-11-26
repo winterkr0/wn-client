@@ -3,6 +3,7 @@ plugins {
 }
 
 val mc = stonecutter.current.version
+val mcDep = property("mod.mc_dep").toString()
 version = "${property("mod.version")}+$mc"
 group = "kr.wnsv"
 
@@ -33,7 +34,7 @@ tasks.withType<JavaCompile>().configureEach {
 tasks.processResources {
     val props = mapOf(
         "version" to project.version.toString(),
-        "mc_dep" to property("mod.mc_dep").toString(),
+        "mc_dep" to mcDep,
     )
     inputs.properties(props)
     filesMatching("fabric.mod.json") { expand(props) }
