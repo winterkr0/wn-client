@@ -1,0 +1,70 @@
+# GitHub에 올리면 자동으로 WN Client 실행 파일(.exe/.dmg/.AppImage)을 만들어 줍니다.
+# - 푸시할 때마다: Actions 탭 → 해당 실행 → Artifacts 에서 다운로드
+# - v1.0.0 처럼 태그를 푸시하면: Releases 페이지에 자동으로 올라감
+name: Build WN Client
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build mod (all versions)
+        working-directory: mod
+        run: chmod +x gradlew && ./gradlew build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mod-jars
+          path: launcher/mods/*.jar
+
+  launcher:
+    needs: mod
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: mod-jars
+          path: launcher/mods
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        working-directory: launcher
+        run: npm install
+      - name: Package
+        working-directory: launcher
+        run: npx electron-builder --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WN-Client-${{ matrix.os }}
+          path: |
+            launcher/dist/*.exe
+            launcher/dist/*.dmg
+            launcher/dist/*.AppImage
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            launcher/dist/*.exe
+            launcher/dist/*.dmg
+            launcher/dist/*.AppImage
