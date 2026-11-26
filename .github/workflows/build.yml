@@ -68,3 +68,5 @@ jobs:
             launcher/dist/*.exe
             launcher/dist/*.dmg
             launcher/dist/*.AppImage
+            launcher/dist/*.blockmap
+            launcher/dist/latest*.yml
