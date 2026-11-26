@@ -78,6 +78,18 @@ async function init() {
     }
   };
 
+  $('appVersion').textContent = 'v' + (await window.wn.version());
+  $('updateBtn').onclick = () => window.wn.installUpdate();
+  window.wn.onUpdate((u) => {
+    $('update').hidden = false;
+    if (u.state === 'downloading') {
+      $('updateText').textContent = `새 버전${u.version ? ' v' + u.version : ''} 받는 중… ${u.percent || 0}%`;
+    } else if (u.state === 'ready') {
+      $('updateText').textContent = `v${u.version} 업데이트 준비 완료`;
+      $('updateBtn').hidden = false;
+    }
+  });
+
   window.wn.onLog(appendLog);
   window.wn.onProgress(({ label, ratio }) => {
     $('status').textContent = label;

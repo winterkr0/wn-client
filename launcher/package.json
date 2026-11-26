@@ -1,7 +1,7 @@
 {
   "name": "wn-client-launcher",
   "productName": "WN Client",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "WN Client - Minecraft 1.20.1 ~ 1.21.11 Fabric launcher",
   "main": "main.js",
   "scripts": {
@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "minecraft-launcher-core": "^3.18.2",
-    "msmc": "^5.0.5"
+    "msmc": "^5.0.5",
+    "electron-updater": "^6.3.9"
   },
   "devDependencies": {
     "electron": "^33.2.0",
@@ -19,15 +20,43 @@
   "build": {
     "appId": "kr.wnsv.client",
     "productName": "WN Client",
-    "directories": { "buildResources": "assets", "output": "dist" },
-    "files": ["main.js", "preload.js", "src/**", "renderer/**", "assets/**", "package.json"],
-    "extraResources": [{ "from": "mods", "to": "mods", "filter": ["*.jar"] }],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**",
+      "renderer/**",
+      "assets/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "mods",
+        "to": "mods",
+        "filter": [
+          "*.jar"
+        ]
+      }
+    ],
     "artifactName": "WN-Client-${version}-${os}-${arch}.${ext}",
     "win": {
       "icon": "assets/icon.ico",
       "target": [
-        { "target": "nsis", "arch": ["x64"] },
-        { "target": "portable", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "nsis": {
@@ -39,8 +68,25 @@
       "runAfterFinish": true,
       "artifactName": "WN-Client-Setup-${version}.${ext}"
     },
-    "portable": { "artifactName": "WN-Client-Portable-${version}.${ext}" },
-    "mac": { "icon": "assets/icon.png", "target": "dmg", "category": "public.app-category.games" },
-    "linux": { "icon": "assets/icon.png", "target": "AppImage", "category": "Game" }
+    "portable": {
+      "artifactName": "WN-Client-Portable-${version}.${ext}"
+    },
+    "mac": {
+      "icon": "assets/icon.png",
+      "target": "dmg",
+      "category": "public.app-category.games"
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": "AppImage",
+      "category": "Game"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "winterkr0",
+        "repo": "wn-client"
+      }
+    ]
   }
 }

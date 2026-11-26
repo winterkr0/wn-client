@@ -105,11 +105,40 @@ ipcMain.handle('game:launch', async () => {
   }
 });
 
+// ── 자동 업데이트 (GitHub 릴리스에서 새 버전 확인 → 백그라운드 다운로드 → 재시작 시 적용) ──
+function setupAutoUpdate() {
+  if (!app.isPackaged) return;
+  let autoUpdater;
+  try {
+    ({ autoUpdater } = require('electron-updater'));
+  } catch {
+    return;
+  }
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.on('update-available', (info) => send('update', { state: 'downloading', version: info.version, percent: 0 }));
+  autoUpdater.on('download-progress', (p) => send('update', { state: 'downloading', percent: Math.round(p.percent) }));
+  autoUpdater.on('update-downloaded', (info) => {
+    send('update', { state: 'ready', version: info.version });
+    // 게임이 안 켜져 있으면 바로 재시작해서 적용
+    if (!running) setTimeout(() => autoUpdater.quitAndInstall(true, true), 2500);
+  });
+  autoUpdater.on('error', (e) => log(`[업데이트] 확인 실패: ${e.message}`));
+  autoUpdater.checkForUpdates().catch(() => {});
+  setInterval(() => autoUpdater.checkForUpdates().catch(() => {}), 30 * 60 * 1000);
+  ipcMain.handle('update:install', () => autoUpdater.quitAndInstall(true, true));
+}
+
+ipcMain.handle('app:version', () => app.getVersion());
+
 ipcMain.handle('open:gamedir', () => {
   shell.openPath(path.join(config.baseDir(), 'instances', config.get().version));
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  win.webContents.once('did-finish-load', setupAutoUpdate);
+});
 app.on('window-all-closed', () => {
   if (!running) app.quit();
 });
