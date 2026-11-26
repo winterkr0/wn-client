@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://mc-heads.net data:; style-src 'self'; script-src 'self'" />
+  <title>WN Client</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <aside class="side">
+    <div class="brand"><span class="logo">WN</span><span id="brandName">WN Client</span></div>
+
+    <div class="account" id="account">
+      <img id="avatar" class="avatar" alt="" />
+      <div class="acc-text">
+        <div id="accName" class="acc-name">로그인 필요</div>
+        <button id="accBtn" class="link">Microsoft 로그인</button>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-tab="play">플레이</button>
+      <button class="nav-item" data-tab="settings">설정</button>
+      <button class="nav-item" data-tab="logs">로그</button>
+    </nav>
+    <div class="side-foot">v1.0.0</div>
+  </aside>
+
+  <main class="main">
+    <section class="tab active" id="tab-play">
+      <div class="hero">
+        <p class="eyebrow">MINECRAFT · FABRIC</p>
+        <h1>바로 들어가기</h1>
+        <p class="sub" id="serverLine">wnsv.kr</p>
+      </div>
+
+      <div class="controls">
+        <label class="field">
+          <span>버전</span>
+          <select id="version"></select>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="autoJoin" />
+          <span>실행하면 서버로 바로 접속</span>
+        </label>
+      </div>
+
+      <button id="play" class="play">플레이</button>
+      <div class="progress"><div id="bar" class="bar"></div></div>
+      <div id="status" class="status">준비됨</div>
+    </section>
+
+    <section class="tab" id="tab-settings">
+      <h2>설정</h2>
+      <label class="field wide">
+        <span>메모리 <b id="ramLabel">4096 MB</b></span>
+        <input type="range" id="ram" min="1024" max="16384" step="512" />
+      </label>
+      <label class="field wide">
+        <span>서버 주소</span>
+        <input type="text" id="server" spellcheck="false" />
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="hideOnLaunch" />
+        <span>게임 실행 중엔 런처 숨기기</span>
+      </label>
+      <button id="openDir" class="ghost">게임 폴더 열기</button>
+    </section>
+
+    <section class="tab" id="tab-logs">
+      <h2>로그</h2>
+      <pre id="log" class="log"></pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

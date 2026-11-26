@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.gradle/
+build/
+**/build/
+.idea/
+*.iml
+launcher/mods/*.jar

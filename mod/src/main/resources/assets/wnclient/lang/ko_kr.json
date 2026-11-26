@@ -1,0 +1,8 @@
+{
+  "key.categories.wnclient": "WN Client",
+  "key.category.wnclient.main": "WN Client",
+  "key.wnclient.editor": "HUD 편집기 열기",
+  "key.wnclient.zoom": "줌 (누르고 있기)",
+  "key.wnclient.fullbright": "풀브라이트 켜기/끄기",
+  "key.wnclient.togglesprint": "토글 스프린트 켜기/끄기"
+}

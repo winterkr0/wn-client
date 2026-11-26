@@ -1,0 +1,8 @@
+{
+  "key.categories.wnclient": "WN Client",
+  "key.category.wnclient.main": "WN Client",
+  "key.wnclient.editor": "Open HUD editor",
+  "key.wnclient.zoom": "Zoom (hold)",
+  "key.wnclient.fullbright": "Toggle fullbright",
+  "key.wnclient.togglesprint": "Toggle auto sprint"
+}

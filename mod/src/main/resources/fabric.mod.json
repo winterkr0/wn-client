@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "wnclient",
+  "version": "${version}",
+  "name": "WN Client",
+  "description": "HUD, 키스트로크, 줌, 풀브라이트 등 PvP 편의 기능",
+  "authors": ["wnsv.kr"],
+  "contact": { "homepage": "https://wnsv.kr" },
+  "license": "All-Rights-Reserved",
+  "environment": "client",
+  "entrypoints": { "client": ["kr.wnsv.wnclient.WNClient"] },
+  "mixins": ["wnclient.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "${mc_dep}",
+    "fabric-api": "*"
+  }
+}
