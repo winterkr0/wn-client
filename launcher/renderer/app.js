@@ -6,7 +6,9 @@ function setAccount(acc) {
   account = acc;
   $('accName').textContent = acc ? acc.name : '로그인 필요';
   $('accBtn').textContent = acc ? '로그아웃' : 'Microsoft 로그인';
-  $('avatar').src = acc ? `https://mc-heads.net/avatar/${acc.uuid}/40` : '';
+  $('avatar').classList.toggle('hidden', !acc);
+  if (acc) $('avatar').src = `https://mc-heads.net/avatar/${acc.uuid}/40`;
+  $('hello').textContent = acc ? `어서 와요, ${acc.name}님` : '어서 와요';
   $('play').disabled = !acc;
   if (!acc) $('status').textContent = '먼저 로그인해 주세요';
 }
@@ -20,10 +22,11 @@ function appendLog(line) {
 
 async function save(patch) {
   cfg = await window.wn.setConfig(patch);
-  $('serverLine').textContent = cfg.autoJoin ? `${cfg.server} 바로 접속` : '메인 화면으로 실행';
+  $('serverLine').textContent = cfg.autoJoin ? `${cfg.server} 으로 바로 들어가요` : '마인크래프트 메인 화면으로 시작해요';
 }
 
 async function init() {
+  $('avatar').onerror = () => $('avatar').classList.add('hidden');
   const info = await window.wn.info();
   document.title = info.brand.name;
   $('brandName').textContent = info.brand.name;

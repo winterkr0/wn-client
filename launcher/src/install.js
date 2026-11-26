@@ -1,5 +1,5 @@
-// Fabric 로더만 설치하고, WN Client 본체는 mods 폴더가 아니라 클라이언트 전용 폴더에서 직접 불러옵니다.
-// → 인스턴스의 mods 폴더는 비어 있고, 모든 기능은 WN Client 안에 들어 있습니다.
+// Fabric 로더만 설치하고, Cobalt Client 본체는 mods 폴더가 아니라 클라이언트 전용 폴더에서 직접 불러옵니다.
+// → 인스턴스의 mods 폴더는 비어 있고, 모든 기능은 Cobalt Client 안에 들어 있습니다.
 const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
@@ -25,11 +25,11 @@ function bundledClientDir() {
   return app.isPackaged ? path.join(process.resourcesPath, 'mods') : path.join(__dirname, '..', 'mods');
 }
 
-// WN Client 본체 jar를 클라이언트 폴더에 두고 경로를 돌려줍니다.
+// Cobalt Client 본체 jar를 클라이언트 폴더에 두고 경로를 돌려줍니다.
 function installClientCore(baseDir, mc) {
   const name = `wnclient-${mc}.jar`;
   const src = path.join(bundledClientDir(), name);
-  if (!fs.existsSync(src)) throw new Error(`WN Client ${mc} 파일이 없어요. 런처를 다시 설치해 주세요.`);
+  if (!fs.existsSync(src)) throw new Error(`Cobalt Client ${mc} 파일이 없어요. 런처를 다시 설치해 주세요.`);
   const dest = path.join(baseDir, 'client', name);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.copyFileSync(src, dest);
@@ -56,7 +56,7 @@ async function prepareInstance(baseDir, mc, log) {
   log(`[설치] Fabric 로더 확인 중 (${mc})`);
   const customId = await installFabricProfile(baseDir, mc);
   const clientJar = installClientCore(baseDir, mc);
-  log(`[설치] WN Client ${mc} 준비 완료`);
+  log(`[설치] Cobalt Client ${mc} 준비 완료`);
   return { instanceDir, customId, clientJar };
 }
 

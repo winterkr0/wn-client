@@ -6,6 +6,9 @@ const config = require('./src/config');
 const { ensureJava } = require('./src/java');
 const { prepareInstance } = require('./src/install');
 
+// 이름을 바꿔도 기존 로그인·설정이 유지되도록 데이터 폴더는 그대로 사용
+app.setPath('userData', path.join(app.getPath('appData'), 'WN Client'));
+
 let win;
 let running = false;
 
@@ -61,7 +64,7 @@ ipcMain.handle('game:launch', async () => {
     progress('Java 확인 중', 0.05);
     const javaPath = await ensureJava(base, mc, (label, r) => progress(label, 0.05 + r * 0.25));
 
-    progress('WN Client 준비 중', 0.3);
+    progress('Cobalt Client 준비 중', 0.3);
     const { instanceDir, customId, clientJar } = await prepareInstance(base, mc, log);
 
     const launcher = new Client();
@@ -84,7 +87,7 @@ ipcMain.handle('game:launch', async () => {
       version: { number: mc, type: 'release', custom: customId },
       memory: { max: `${cfg.ramMb}M`, min: '1024M' },
       overrides: { gameDirectory: instanceDir },
-      // WN Client 본체를 mods 폴더 밖에서 바로 불러옴
+      // Cobalt Client 본체를 mods 폴더 밖에서 바로 불러옴
       customArgs: [`-Dfabric.addMods=${clientJar}`],
     };
     if (cfg.autoJoin && cfg.server) {

@@ -1,6 +1,6 @@
 {
-  "key.categories.wnclient": "WN Client",
-  "key.category.wnclient.main": "WN Client",
+  "key.categories.wnclient": "Cobalt Client",
+  "key.category.wnclient.main": "Cobalt Client",
   "key.wnclient.editor": "Open HUD editor",
   "key.wnclient.zoom": "Zoom (hold)",
   "key.wnclient.fullbright": "Toggle fullbright",

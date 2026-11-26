@@ -3,13 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://mc-heads.net data:; style-src 'self'; script-src 'self'" />
-  <title>WN Client</title>
+  <title>Cobalt Client</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <aside class="side">
-    <div class="brand"><span class="logo">WN</span><span id="brandName">WN Client</span></div>
+  <!-- 배경: 노을 + 언덕 -->
+  <svg class="scene" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1d1613" />
+        <stop offset="55%" stop-color="#3a2419" />
+        <stop offset="80%" stop-color="#8a4a2c" />
+      </linearGradient>
+      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffcf8a" stop-opacity=".75" />
+        <stop offset="25%" stop-color="#f4a261" stop-opacity=".38" />
+        <stop offset="55%" stop-color="#e07a4a" stop-opacity=".14" />
+        <stop offset="100%" stop-color="#e07a4a" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <rect width="1200" height="700" fill="url(#sky)" />
+    <ellipse cx="860" cy="545" rx="560" ry="380" fill="url(#glow)" />
+    <circle cx="860" cy="545" r="62" fill="#ffd79a" />
+    <path d="M0 520 C 180 470, 340 480, 520 515 S 860 565, 1200 485 L1200 700 L0 700 Z" fill="#5e3726" />
+    <path d="M0 585 C 220 540, 420 565, 640 592 S 1000 612, 1200 565 L1200 700 L0 700 Z" fill="#44291d" />
+    <path d="M0 645 C 260 615, 520 628, 760 652 S 1060 662, 1200 642 L1200 700 L0 700 Z" fill="#2a1a13" />
+  </svg>
 
+  <header class="top">
+    <div class="brand">
+      <span class="mark">C</span>
+      <span id="brandName">Cobalt Client</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-tab="play">홈</button>
+      <button class="nav-item" data-tab="settings">설정</button>
+      <button class="nav-item" data-tab="logs">로그</button>
+    </nav>
     <div class="account" id="account">
       <img id="avatar" class="avatar" alt="" />
       <div class="acc-text">
@@ -17,61 +47,46 @@
         <button id="accBtn" class="link">Microsoft 로그인</button>
       </div>
     </div>
-
-    <nav class="nav">
-      <button class="nav-item active" data-tab="play">플레이</button>
-      <button class="nav-item" data-tab="settings">설정</button>
-      <button class="nav-item" data-tab="logs">로그</button>
-    </nav>
-    <div class="update" id="update" hidden>
-      <div id="updateText">업데이트 받는 중…</div>
-      <button id="updateBtn" class="update-btn" hidden>지금 재시작</button>
-    </div>
-    <div class="side-foot" id="appVersion">v1.2.0</div>
-  </aside>
+  </header>
 
   <main class="main">
     <section class="tab active" id="tab-play">
-      <div class="hero">
-        <p class="eyebrow">MINECRAFT · FABRIC</p>
-        <h1>바로 들어가기</h1>
-        <p class="sub" id="serverLine">wnsv.kr</p>
-      </div>
+      <p class="hello" id="hello">어서 와요</p>
+      <h1>오늘도 한 판<br />해볼까요?</h1>
+      <p class="sub" id="serverLine">wnsv.kr</p>
 
-      <div class="controls">
-        <label class="field">
+      <div class="launch">
+        <label class="select">
           <span>버전</span>
           <select id="version"></select>
         </label>
+        <button id="play" class="play">플레이</button>
+      </div>
+      <div class="progress"><div id="bar" class="bar"></div></div>
+      <div class="row">
+        <div id="status" class="status">준비됨</div>
         <label class="toggle">
           <input type="checkbox" id="autoJoin" />
-          <span>실행하면 서버로 바로 접속</span>
+          <span>서버로 바로 접속</span>
         </label>
       </div>
 
-      <button id="play" class="play">플레이</button>
-      <div class="progress"><div id="bar" class="bar"></div></div>
-      <div id="status" class="status">준비됨</div>
-
-      <div class="features">
-        <p class="eyebrow">WN CLIENT 내장 기능</p>
-        <ul>
-          <li><b>HUD</b> FPS · CPS · 핑 · 좌표 · 키스트로크 · 갑옷</li>
-          <li><b>줌</b> C 누르고 있기</li>
-          <li><b>풀브라이트</b> G</li>
-          <li><b>토글 스프린트</b> V</li>
-          <li><b>클라이언트 메뉴</b> 오른쪽 Shift</li>
-        </ul>
-      </div>
+      <ul class="chips">
+        <li><b>HUD</b>FPS · CPS · 핑 · 좌표</li>
+        <li><b>C</b>줌</li>
+        <li><b>G</b>풀브라이트</li>
+        <li><b>V</b>토글 스프린트</li>
+        <li><b>R-Shift</b>클라이언트 메뉴</li>
+      </ul>
     </section>
 
-    <section class="tab" id="tab-settings">
+    <section class="tab panel" id="tab-settings">
       <h2>설정</h2>
-      <label class="field wide">
+      <label class="field">
         <span>메모리 <b id="ramLabel">4096 MB</b></span>
         <input type="range" id="ram" min="1024" max="16384" step="512" />
       </label>
-      <label class="field wide">
+      <label class="field">
         <span>서버 주소</span>
         <input type="text" id="server" spellcheck="false" />
       </label>
@@ -82,11 +97,19 @@
       <button id="openDir" class="ghost">게임 폴더 열기</button>
     </section>
 
-    <section class="tab" id="tab-logs">
+    <section class="tab panel" id="tab-logs">
       <h2>로그</h2>
       <pre id="log" class="log"></pre>
     </section>
   </main>
+
+  <footer class="foot">
+    <div class="update" id="update" hidden>
+      <span id="updateText">업데이트 받는 중…</span>
+      <button id="updateBtn" class="update-btn" hidden>지금 재시작</button>
+    </div>
+    <span class="version" id="appVersion">v1.3.0</span>
+  </footer>
 
   <script src="app.js"></script>
 </body>

@@ -58,7 +58,7 @@ public final class Config {
                 instance = c;
             }
         } catch (Exception e) {
-            System.err.println("[WN Client] 설정을 읽지 못해 기본값을 씁니다: " + e);
+            System.err.println("[Cobalt Client] 설정을 읽지 못해 기본값을 씁니다: " + e);
         }
     }
 
@@ -69,7 +69,7 @@ public final class Config {
                 GSON.toJson(instance, w);
             }
         } catch (IOException e) {
-            System.err.println("[WN Client] 설정 저장 실패: " + e);
+            System.err.println("[Cobalt Client] 설정 저장 실패: " + e);
         }
     }
 }

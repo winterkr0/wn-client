@@ -23,7 +23,7 @@ public class HudEditorScreen extends Screen {
     private boolean wasDown;
 
     public HudEditorScreen() {
-        super(Component.literal("WN Client"));
+        super(Component.literal("Cobalt Client"));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class HudEditorScreen extends Screen {
             boolean hot = e == dragging || hit(mc, e, mouseX, mouseY);
             outline(g, x - 1, y - 1, w + 2, h + 2, hot ? HudElements.ACCENT : 0x80FFFFFF);
         }
-        g.drawCenteredString(this.font, "§aWN Client §f설정 · 요소를 드래그해서 옮기세요 · ESC로 닫기", this.width / 2, 8, HudElements.WHITE);
+        g.drawCenteredString(this.font, "§9Cobalt Client §f설정 · 요소를 드래그해서 옮기세요 · ESC로 닫기", this.width / 2, 8, HudElements.WHITE);
     }
 
     private boolean hit(Minecraft mc, HudElement e, int mx, int my) {

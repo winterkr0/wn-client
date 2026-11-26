@@ -15,7 +15,8 @@ import java.util.function.Function;
 public final class HudElements {
     public static final int BG = 0x70000000;
     public static final int WHITE = 0xFFFFFFFF;
-    public static final int ACCENT = 0xFF4ADE80;
+    public static final int ACCENT = 0xFF4A78E8; // 코발트
+    public static final int GOOD = 0xFF4ADE80;
 
     private HudElements() {}
 
@@ -119,7 +120,7 @@ public final class HudElements {
                     if (st.isDamageableItem()) {
                         int left = st.getMaxDamage() - st.getDamageValue();
                         float ratio = left / (float) st.getMaxDamage();
-                        int color = ratio > 0.5f ? ACCENT : ratio > 0.2f ? 0xFFFACC15 : 0xFFF87171;
+                        int color = ratio > 0.5f ? GOOD : ratio > 0.2f ? 0xFFFACC15 : 0xFFF87171;
                         g.drawString(mc.font, String.valueOf(left), x + 19, row + 4, color, true);
                     } else if (st.getCount() > 1) {
                         g.drawString(mc.font, String.valueOf(st.getCount()), x + 19, row + 4, WHITE, true);

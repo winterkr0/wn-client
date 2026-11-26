@@ -4,7 +4,7 @@ const { app } = require('electron');
 
 // 브랜딩/서버 기본값 — 여기만 바꾸면 됩니다.
 const BRAND = {
-  name: 'WN Client',
+  name: 'Cobalt Client',
   server: 'wnsv.kr',
 };
 

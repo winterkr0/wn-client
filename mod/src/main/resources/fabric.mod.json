@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "wnclient",
   "version": "${version}",
-  "name": "WN Client",
+  "name": "Cobalt Client",
   "description": "HUD, 키스트로크, 줌, 풀브라이트 등 PvP 편의 기능",
   "authors": ["wnsv.kr"],
   "contact": { "homepage": "https://wnsv.kr" },
