@@ -1,7 +1,7 @@
 {
   "name": "wn-client-launcher",
   "productName": "Cobalt Client",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Cobalt Client - Minecraft 1.20.1 ~ 1.21.11 client",
   "main": "main.js",
   "scripts": {

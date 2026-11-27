@@ -25,7 +25,25 @@ async function save(patch) {
   $('serverLine').textContent = cfg.autoJoin ? `${cfg.server} 으로 바로 들어가요` : '마인크래프트 메인 화면으로 시작해요';
 }
 
+function spawnPetals() {
+  const box = $('petals');
+  if (!box) return;
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('span');
+    p.className = 'petal';
+    p.style.left = `${Math.random() * 110}%`;
+    p.style.setProperty('--dur', `${10 + Math.random() * 10}s`);
+    p.style.setProperty('--delay', `${-Math.random() * 20}s`);
+    p.style.setProperty('--sway', `${2 + Math.random() * 3}s`);
+    const k = 0.6 + Math.random() * 0.7;
+    p.style.width = `${12 * k}px`;
+    p.style.height = `${9 * k}px`;
+    box.appendChild(p);
+  }
+}
+
 async function init() {
+  spawnPetals();
   $('avatar').onerror = () => $('avatar').classList.add('hidden');
   const info = await window.wn.info();
   document.title = info.brand.name;
